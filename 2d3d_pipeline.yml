@@ -1,0 +1,17 @@
+name: 2d3d_pipeline
+channels:
+    - conda-forge
+    - pyg
+    - pytorch
+    - pytorch3d
+    - conda-forge
+    - fvcore
+    - iopath
+    - bottler
+    - defaults
+# minimize what we download via conda forge for vast speedup
+dependencies:
+    - jupyter
+    - pip
+    - python=3.10
+    - pytorch3d

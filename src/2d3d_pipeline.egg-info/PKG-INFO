@@ -1,3 +1,13 @@
+Metadata-Version: 2.1
+Name: 2d3d-pipeline
+Version: 0.1.0
+Summary: image to 3d pipeline
+Author-email: <andrew.bartels@gatech.edu>
+License: GNU AGPL
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Provides-Extra: testing
+
 # 2d 3d Pipeline Project Repo
 
 taking images and 3d models, and making sense of it all.
