@@ -1,4 +1,4 @@
-name: 2d3d_pipeline
+name: im23D_pipeline
 channels:
     - conda-forge
     - pyg

@@ -6,7 +6,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "2d3d_pipeline"
+name = "im23D_pipeline"
 version = "0.1.0"
 authors = [
     {author="Andrew Bartels", email="<andrew.bartels@gatech.edu>"},
@@ -63,4 +63,4 @@ testing = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["2d3d_pipeline*"]
+include = ["im23D_pipeline*"]

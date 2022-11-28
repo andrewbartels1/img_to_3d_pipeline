@@ -8,7 +8,7 @@ This repo is the final result of many hours of hard work for a class project in 
 
 ## Setup and Introduction
 
-`2d3d_pipeline` can be pip installed as well. (this is mostly in progress)
+`im23D_pipeline` can be pip installed as well. (this is mostly in progress)
 
 ### Development Environment
 
@@ -16,14 +16,14 @@ To install the `conda` environment and the `jupyter` kernel with the full develo
 clone the repo and run: 
 
 ```bash
-$ cd ~/dev-or-some-folder/2d3d_pipeline
+$ cd ~/dev-or-some-folder/im23D_pipeline
 $ bash install.sh
 ```
 
 To uninstall the environment and kernel run:
 
 ```bash
-$ cd ~/dev-or-some-folder/2d3d_pipeline
+$ cd ~/dev-or-some-folder/im23D_pipeline
 $ bash uninstall.sh
 ```
 
