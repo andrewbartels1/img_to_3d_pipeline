@@ -3,8 +3,8 @@ from torch.utils.data import DataLoader, random_split
 import pandas as pd
 import os
 import numpy as np
-from utils import read_datafile, reshape_data
-
+# from utils import read_datafile, reshape_data
+from im23D_pipeline.dataloader import ShapeNetCoreDataset
 
 def prepare_data(path: str,
                  num_workers: int = 0,
@@ -30,7 +30,7 @@ def prepare_data(path: str,
         Dataloader used for testing.
     """
     # load the dataset
-    dataset = LiddedDataset(path)
+    dataset = ShapeNetCoreDataset(path)
     # calculate split
     train, test = dataset.get_splits(test_train_split)
 
