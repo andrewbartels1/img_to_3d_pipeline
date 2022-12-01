@@ -1,2 +1,0 @@
-https://amazon-berkeley-objects.s3.amazonaws.com/archives/abo-images-original.tar
-https://amazon-berkeley-objects.s3.amazonaws.com/archives/abo-3dmodels.tar
