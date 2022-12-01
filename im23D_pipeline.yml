@@ -2,17 +2,8 @@ name: im23D_pipeline
 channels:
     - conda-forge
     - pyg
-    - pytorch
-    - pytorch3d
-    - conda-forge
-    - fvcore
-    - iopath
-    - bottler
     - defaults
 # minimize what we download via conda forge for vast speedup
 dependencies:
-    - cudatoolkit
-    - jupyter
     - pip
-    - python
-    - pytorch3d
+    - python=3.10

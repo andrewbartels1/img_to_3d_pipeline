@@ -28,6 +28,8 @@ clone the repo and run:
 ```bash
 $ cd ~/dev-or-some-folder/im23D_pipeline
 $ bash install.sh
+$ conda activate im23D_pipeline
+$ bash install_pytorch3d.sh
 ```
 
 To uninstall the environment and kernel run:
