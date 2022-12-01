@@ -1,4 +1,7 @@
-data/
+data/abo*
+data/3dmodels/metadata/
+data/3dmodels/original/
+data/pix3d_full/
 data/ShapeNetCore.v2/
 data/r2n2_shapenet_dataset/
 data/ShapeNetCore.v2.zip

@@ -15,7 +15,6 @@ description = "image to 3d pipeline"
 readme = "README.md"
 license = {text = "GNU AGPL"}
 
-
 dependencies = [
     "dask",
     "gcsfs",

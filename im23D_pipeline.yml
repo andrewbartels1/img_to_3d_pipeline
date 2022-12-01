@@ -11,7 +11,8 @@ channels:
     - defaults
 # minimize what we download via conda forge for vast speedup
 dependencies:
+    - cudatoolkit
     - jupyter
     - pip
-    - python=3.10
+    - python
     - pytorch3d
