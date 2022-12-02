@@ -10,7 +10,11 @@ src/im23D_pipeline.egg-info/top_level.txt
 src/im23D_pipeline/dataloader/__init__.py
 src/im23D_pipeline/dataloader/load_data.py
 src/im23D_pipeline/datasets/__init__.py
-src/im23D_pipeline/datasets/dataset_classes.py
+src/im23D_pipeline/datasets/abo_dataset.py
+src/im23D_pipeline/datasets/base_dataset.py
+src/im23D_pipeline/datasets/pix3d_dataset.py
+src/im23D_pipeline/datasets/r2n2_dataset.py
+src/im23D_pipeline/datasets/shapenet_dataset.py
 src/im23D_pipeline/pipeline/__init__.py
 src/im23D_pipeline/pipeline/pipeline.py
 src/im23D_pipeline/pydantic_models/__init__.py

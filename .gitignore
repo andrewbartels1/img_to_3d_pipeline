@@ -1,3 +1,4 @@
+__pycache__/
 data/abo*
 data/images/*
 data/3dmodels/metadata/

@@ -29,9 +29,12 @@ class img23DBaseDataset(Dataset):
         # self.
     
     def _load_objects_take_pictures(self):
-        DontUseBaseLoaderMssg = "The img23DBaseDataset class is not meant to be used directly, " + \
+        self.DontUseBaseLoaderMssg = "The img23DBaseDataset class is not meant to be used directly, " + \
                                 "please use ShapeNetCoreDataset, R2N2Dataset, ABODataset, or Pix3dDataset to load datasets!"
-        raise NotImplementedError
+        raise NotImplementedError(self.DontUseBaseLoaderMssg)
+    
+    def _generate_data_catalog(self, root_path_folder):
+        raise NotImplementedError(self.DontUseBaseLoaderMssg)
     
     def __len__(self):
         return len(self.dataCatalog)
@@ -42,15 +45,4 @@ class img23DBaseDataset(Dataset):
         return sample
 
 
-class Pix3dDataset(img23DBaseDataset):
-    raise NotImplementedError()
-
-class R2N2Dataset(img23DBaseDataset):    
-    raise NotImplementedError()
-
-class ShapeNetCoreDataset(img23DBaseDataset):
-    raise NotImplementedError()
-
-class ABODataset(img23DBaseDataset):
-    raise NotImplementedError()
 
