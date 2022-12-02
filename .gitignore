@@ -9,5 +9,6 @@ data/ShapeNetCore.v2/
 data/r2n2_shapenet_dataset/
 !data/r2n2_shapenet_dataset/.gitkeep
 data/ShapeNetCore.v2.zip
+!data/README.md
  __pycache__/
  *.pyc
