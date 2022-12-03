@@ -1,1 +1,1 @@
-from .models import BaseDatasetModel, BaseAtomicDataObjectModel, TrainerPydanticModel
+from .models import ShapeNetModel, BaseAtomicShapeNetInput, TrainerPydanticModel

@@ -1,7 +1,4 @@
+from torch.utils.data import Dataset
 
-from im23D_pipeline.datasets.base_dataset import img23DBaseDataset
-
-
-
-class Pix3dDataset(img23DBaseDataset):
+class Pix3dDataset(Dataset):
     pass
