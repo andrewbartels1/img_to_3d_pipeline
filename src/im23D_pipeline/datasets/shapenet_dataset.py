@@ -7,10 +7,11 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset  # , DataLoader, random_split
 from im23D_pipeline.pydantic_models import ShapeNetModel
+from im23D_pipeline.datasets import img23DBaseDataset
 import dask.dataframe as pd
 
 # https://trimsh.org/trimesh.proximity.html#trimesh.proximity.signed_distance
-
+# https://trimsh.org/examples.nearest.html
 SUPPORTED_DATASETS = ["img23DBaseDataset", "Pix3dDataset", "ShapeNetCoreDataset", "ABODataset"]
 
 
@@ -24,6 +25,7 @@ class ShapeNetCoreDataset(Dataset):
 
     def __init__(self, pydantic_model: ShapeNetModel):
         # load the csv file as a dataframe
+        self._generate_data_catalog
         self.dataCatalog = pd.read_csv(path)
 
         # self.file_list = []
@@ -33,8 +35,8 @@ class ShapeNetCoreDataset(Dataset):
 
     def _load_objects_take_pictures(self):
         self.DontUseBaseLoaderMssg = (
-            f"The img23DBaseDataset class is not meant to be used directly, "
-            + "please use classes: in {SUPPORTED_DATASETS:\n} to load datasets!"
+            "The img23DBaseDataset class is not meant to be used directly, "
+            + "please use classes: in {} to load datasets!".format('\n'.join(SUPPORTED_DATASETS))
         )
         return NotImplementedError(self.DontUseBaseLoaderMssg)
 
