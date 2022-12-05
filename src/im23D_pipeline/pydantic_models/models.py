@@ -33,6 +33,7 @@ class ShapeNetModel(BaseModel):
         cli=("-drf", "--descryptor-ring-file"),
     )
     data_catalog_file: Optional[FilePath] = Field(None, description=data_catalog_file_description)
+    data_catalog_file_type: Optional[str] = Field("csv", description="data catalog output type (only csv supported currently)")
     refresh_data_catalog: bool = Field(False, description=refresh_data_catalog_description)
     dataset_list: List = Field([], description=dataset_list_description)
     storage_options_remote: Optional[Dict[str, Any]] = Field({}, description=storage_option_description)
