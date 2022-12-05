@@ -19,6 +19,13 @@ class DataFileTypeChoices(Enum):
     # voxel = "voxel"
 
 
+class BaseModel(BaseModel):
+    """Fill this in when there are multiple pydantic models with repeated variables"""
+    storage_options_remote: Optional[Dict[str, Any]] = Field({}, description=storage_option_description)
+    local_protocol: Optional[str] = Field("file", description=protocol_description)
+    local_fs: Optional[Any]  # don't actually use this, it's generate based on other things
+    verbose: bool = Field(False, description="prints verbose output")
+    
 class ShapeNetModel(BaseModel):
     """Base model for dataset inputs"""
 
@@ -32,13 +39,11 @@ class ShapeNetModel(BaseModel):
         description=decryptor_ring_file_description,
         cli=("-drf", "--descryptor-ring-file"),
     )
-    data_catalog_file: Optional[FilePath] = Field(None, description=data_catalog_file_description)
+    data_catalog_file: Optional[str] = Field("datacatalog_parts/datacatalog-*.csv", description=data_catalog_file_description)
     data_catalog_file_type: Optional[str] = Field("csv", description="data catalog output type (only csv supported currently)")
     refresh_data_catalog: bool = Field(False, description=refresh_data_catalog_description)
     dataset_list: List = Field([], description=dataset_list_description)
-    storage_options_remote: Optional[Dict[str, Any]] = Field({}, description=storage_option_description)
-    local_protocol: Optional[str] = Field("file", description=protocol_description)
-    local_fs: Optional[Any]  # don't actually use this, it's generate based on other things
+    
 
     @root_validator()
     def validate_fields(cls, values):

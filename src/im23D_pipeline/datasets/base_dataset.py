@@ -36,8 +36,10 @@ class img23DBaseDataset(Dataset):
         self.data_catalog_file = shape_input_model.data_catalog_file
         self.data_catalog_file_type = shape_input_model.data_catalog_file_type
         self.refresh_data_catalog = shape_input_model.refresh_data_catalog
-
-        if not (self.data_catalog_file or self.refresh_data_catalog):
+        self.local_fs = shape_input_model.local_fs
+        self.verbose = shape_input_model.verbose
+        
+        if not self.refresh_data_catalog:
             self.data_catalog_file = self._generate_data_catalog()
 
         # load the csv file as a (dask) dataframe
