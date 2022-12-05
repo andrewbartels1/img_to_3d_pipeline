@@ -20,20 +20,23 @@ class img23DBaseDataset(Dataset):
     :type Dataset: _type_
     """
 
-    def __init__(self, pydantic_model: ShapeNetModel):
-        # load the csv file as a dataframe
-        self._generate_data_catalog
+    def __init__(self, shape_input_model: ShapeNetModel):
+
+        if not (shape_input_model.data_catalog_file or shape_input_model.refresh_data_catalog):
+            self._generate_data_catalog
+
+        # load the csv file as a (dask) dataframe
         self.dataCatalog = pd.read_csv(path)
 
         # self.file_list = []
-        self.data_folder = pydantic_model.dataset_folder
-        self.mesh_type = pydantic_model.mesh_type
+        self.data_folder = shape_input_model.dataset_folder
+        self.mesh_type = shape_input_model.mesh_type
         # self.
 
     def _load_objects_take_pictures(self):
         self.DontUseBaseLoaderMssg = (
             "The img23DBaseDataset class is not meant to be used directly, "
-            + "please use classes: in {} to load datasets!".format('\n'.join(SUPPORTED_DATASETS))
+            + "please use classes: in {} to load datasets!".format("\n".join(SUPPORTED_DATASETS))
         )
         return NotImplementedError(self.DontUseBaseLoaderMssg)
 

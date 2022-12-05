@@ -12,10 +12,12 @@ class MeshTypeChoices(Enum):
     sdf = "sdf"
     voxel = "voxel"
 
+
 class DataFileTypeChoices(Enum):
     obj = "obj"
     glb = "glb"
     # voxel = "voxel"
+
 
 class ShapeNetModel(BaseModel):
     """Base model for dataset inputs"""
@@ -23,38 +25,52 @@ class ShapeNetModel(BaseModel):
     dataset_folder: DirectoryPath = Field(
         DirectoryPath, description=dataset_folder_description, cli=("-df", "--dataset-folder")
     )
-    mesh_type: str = Field(
-        MeshTypeChoices.mesh.value, description=mesh_type_description, cli=("-m", "--mesh")
-    )
+    mesh_type: str = Field(MeshTypeChoices.mesh.value, description=mesh_type_description, cli=("-m", "--mesh"))
     data_file_type: str = Field(DataFileTypeChoices.obj.value, description=data_file_type_description)
     decryptor_ring_file: FilePath = Field(
         "../data/ShapeNetCore.v2/taxonomy.json",
         description=decryptor_ring_file_description,
         cli=("-drf", "--descryptor-ring-file"),
     )
+    data_catalog_file: Optional[FilePath] = Field(None, description=data_catalog_file_description)
+    refresh_data_catalog: bool = Field(False, description=refresh_data_catalog_description)
     dataset_list: List = Field([], description=dataset_list_description)
     storage_options_remote: Optional[Dict[str, Any]] = Field({}, description=storage_option_description)
     local_protocol: Optional[str] = Field("file", description=protocol_description)
-    local_fs: Optional[Any] # don't actually use this, it's generate based on other things
+    local_fs: Optional[Any]  # don't actually use this, it's generate based on other things
 
     @root_validator()
     def validate_fields(cls, values):
         """This validator can check values based on other values"""
-        
-        values["local_fs"] = fsspec.filesystem(values.get("local_protocol"), storage_options=values.get("storage_options"))
-        
+
+        values["local_fs"] = fsspec.filesystem(
+            values.get("local_protocol"), storage_options=values.get("storage_options")
+        )
+
         # glob the dataset list
         if not values.get("dataset_list"):
             # ! NOTE: THIS DOESN'T WORK ON S3FS Because it doesn't have a concept of folders
-            print(type(values.get("dataset_folder")))
-            print(values.get("mesh_type"))
-            print(values.get("data_file_type"))
-            print("finding all files in:", values.get("dataset_folder").as_posix() + "/**/*." + values.get("data_file_type"))
-            values["dataset_list"] = values["local_fs"].glob(values.get("dataset_folder").as_posix() + "**/*." + values.get("data_file_type"))
+            print(
+                "finding all files in:",
+                values.get("dataset_folder").as_posix() + "/**/*." + values.get("data_file_type"),
+            )
+            values["dataset_list"] = values["local_fs"].glob(
+                values.get("dataset_folder").as_posix() + "**/*." + values.get("data_file_type")
+            )
+            print(
+                "found {} number of {} files in the dataset".format(
+                    len(values["dataset_list"]), values.get("data_file_type")
+                )
+            )
 
-        
+        assert (
+            len(values["dataset_list"]) > 0
+        ), "something went wrong with locating mesh files in {}, maybe check to ensure the file extension is correct?".format(
+            values.get("dataset_folder").as_posix()
+        )
+
         return values
-    
+
     # For fsspec stuff
     class Config:
         arbitrary_types_allowed = True
