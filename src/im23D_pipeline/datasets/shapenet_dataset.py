@@ -49,14 +49,14 @@ class ShapeNetCoreDataset(img23DBaseDataset):
             # "bounding_box": self.bbox_list,
         }
         
-        catalog_frame = pd.from_dict(data_catalog_dict, npartitions=10)
+        dataCatalog = pd.from_dict(data_catalog_dict, npartitions=10)
         catalog_path = Path(self.data_folder.as_posix()).joinpath("".join(("datacatalog_parts/datacatalog-*.csv")) )
         
         print(catalog_path)
         if self.verbose: print("data catalog parts saved to:", self.meta_data_label_df["simple_label"].unique())
         
         
-        catalog_frame['metadata_file'] = catalog_frame.apply(self._get_meta_json_path, axis=1, meta=("x", str))
+        dataCatalog['metadata_file'] = dataCatalog.apply(self._get_meta_json_path, axis=1, meta=("x", str))
         
         
         
@@ -64,7 +64,7 @@ class ShapeNetCoreDataset(img23DBaseDataset):
         # catalog_frame["label"] = 
         print(self.data_folder)
         print(self.data_catalog_file)
-        self.data_catalog_path = catalog_frame.to_csv(self.data_folder.joinpath(self.data_catalog_file))
+        self.data_catalog_path = dataCatalog.to_csv(self.data_folder.joinpath(self.data_catalog_file))
 
         return self.data_catalog_path
 
@@ -82,8 +82,11 @@ class ShapeNetCoreDataset(img23DBaseDataset):
         
         return self.meta_data_label_df
 
-    def _get_metadata_for_meshes(self):
+    def _assign_metadata_and_labels_for_meshes(self):
         """Open a json metadata file (shapenet specific) and get a centroid, bounding box, and simple label"""
+        
+        
+        
         
         
         return None
@@ -98,7 +101,8 @@ class ShapeNetCoreDataset(img23DBaseDataset):
     def __len__(self):
         return len(self.dataCatalog)
 
-    # get a row at an index 5375
+    # get a row at an index 5375 ONE row of data
     def __getitem__(self, idx):
+        
         sample = []
         return sample

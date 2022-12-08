@@ -55,6 +55,9 @@ class img23DBaseDataset(Dataset):
     def _generate_data_catalog(self, root_path_folder):
         return NotImplementedError(self.DontUseBaseLoaderMssg)
 
+    def _assign_metadata_and_labels_for_meshes(self):
+        return NotImplementedError(self.DontUseBaseLoaderMssg)
+    
     def _read_decryptor_ring_file_and_get_labels(self):
         return NotImplementedError(self.DontUseBaseLoaderMssg)
 
@@ -66,5 +69,4 @@ class img23DBaseDataset(Dataset):
 
     # get a row at an index 5375
     def __getitem__(self, idx):
-        sample = []
-        return sample
+        return NotImplementedError(self.DontUseBaseLoaderMssg)
