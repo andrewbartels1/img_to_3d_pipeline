@@ -1,2 +1,4 @@
 https://amazon-berkeley-objects.s3.amazonaws.com/archives/abo-images-original.tar
 https://amazon-berkeley-objects.s3.amazonaws.com/archives/abo-3dmodels.tar
+http://shapenet.cs.stanford.edu/shapenet/obj-zip/ShapeNetCore.v2.zip
+http://pix3d.csail.mit.edu/data/pix3d_full.zip
