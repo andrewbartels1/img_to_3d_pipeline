@@ -41,9 +41,7 @@ class ShapeNetModel(BaseModel):
         description=decryptor_ring_file_description,
         cli=("-drf", "--descryptor-ring-file"),
     )
-    data_catalog_file: Optional[str] = Field(
-        "datacatalog_parts/datacatalog.csv", description=data_catalog_file_description
-    )
+    data_catalog_file: Optional[str] = Field("datacatalog_parts/datacatalog.csv", description=data_catalog_file_description)
     data_catalog_file_type: Optional[str] = Field(
         "csv", description="data catalog output type (only csv supported currently)"
     )
@@ -55,9 +53,7 @@ class ShapeNetModel(BaseModel):
     def validate_fields(cls, values):
         """This validator can check values based on other values"""
 
-        values["local_fs"] = fsspec.filesystem(
-            values.get("local_protocol"), storage_options=values.get("storage_options")
-        )
+        values["local_fs"] = fsspec.filesystem(values.get("local_protocol"), storage_options=values.get("storage_options"))
 
         # glob the dataset list
         if not values.get("dataset_list"):

@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import numpy as np
 import torch
-from torch.utils.data import Dataset  # , DataLoader, random_split
+from torch.utils.data import Dataset, random_split
 from im23D_pipeline.pydantic_models import ShapeNetModel
 import pandas as pnd
 
@@ -80,6 +80,14 @@ class img23DBaseDataset(Dataset):
 
     def __len__(self):
         return len(self.dataCatalog.index)
+
+    # get indexes for train and test rows
+    def get_splits(self, n_test=0.2):
+        # determine sizes
+        test_size = round(n_test * len(self.dataCatalog))
+        train_size = len(self.dataCatalog) - test_size
+        # calculate the split
+        return random_split(self, [train_size, test_size])
 
     # get a row at an index 5375
     def __getitem__(self, idx):

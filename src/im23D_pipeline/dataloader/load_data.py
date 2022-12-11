@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 # from utils import read_datafile, reshape_data
-from im23D_pipeline.dataloader import ShapeNetCoreDataset
+from im23D_pipeline.datasets import ShapeNetCoreDataset
 
 
 def prepare_data(
