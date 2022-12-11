@@ -36,6 +36,7 @@ dependencies = [
     "plotly",
     "requests",
     "matplotlib",
+    "seaborn",
     "numpy",
     "PyMCubes",
     "tqdm",
@@ -47,7 +48,6 @@ dependencies = [
 dev = [
     "black[jupyter]",
     "datashader",
-    "jupyter",
     "matplotlib",
     "pyarrow",
     "seaborn",

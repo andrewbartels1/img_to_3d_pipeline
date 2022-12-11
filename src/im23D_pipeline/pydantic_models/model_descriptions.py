@@ -27,3 +27,6 @@ data_file_type_description = (
 )
 data_catalog_file_description = "path to the data catalog with all the locations of files and metadata mappings. If this is the first time running the dataset, this will generate automagically, if the path exists, this will save you some time to not regenerate every time."
 refresh_data_catalog_description = "runs the function that regenerates the data catalog, unless new data is put in there, this should be left as `False`"
+datacatalog_path_description = (
+    "could be changed, but outputs a glob string where dask will write out the dataset parts."
+)

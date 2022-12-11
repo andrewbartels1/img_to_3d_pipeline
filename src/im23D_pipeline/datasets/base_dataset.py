@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset  # , DataLoader, random_split
 from im23D_pipeline.pydantic_models import ShapeNetModel
-import dask.dataframe as pd
+import dask as dd
 
 # https://trimsh.org/trimesh.proximity.html#trimesh.proximity.signed_distance
 # https://trimsh.org/examples.nearest.html
@@ -38,12 +38,25 @@ class img23DBaseDataset(Dataset):
         self.refresh_data_catalog = shape_input_model.refresh_data_catalog
         self.local_fs = shape_input_model.local_fs
         self.verbose = shape_input_model.verbose
-        
+        self.catalog_path = shape_input_model.datacatalog_path
+
         if not self.refresh_data_catalog:
-            self.data_catalog_file = self._generate_data_catalog()
+            self.data_catalog_file_path = self._generate_data_catalog()
 
         # load the csv file as a (dask) dataframe
-        # self.dataCatalog = pd.read_csv(self.data)
+        self.dataCatalog = dd.dataframe.read_csv(self.data_catalog_file_path)
+
+    def write_catalog_to_csv(self, dataCatalog):
+        if self.verbose:
+            print("writing out metadata to:", self.data_folder.joinpath(self.data_catalog_file))
+        self.data_catalog_path = dataCatalog.to_csv(self.data_folder.joinpath(self.data_catalog_file))
+
+        if self.verbose:
+            print("wrote data catalog to path:", self.data_catalog_path)
+
+    def _load_data_catalog_file(self):
+        """Reads in group of csv data catalogs files into dask dataframe"""
+        return dd.dataframe.read_csv(self.data_catalog_file_path)
 
     def _load_objects_take_pictures(self):
         self.DontUseBaseLoaderMssg = (
@@ -57,7 +70,7 @@ class img23DBaseDataset(Dataset):
 
     def _assign_metadata_and_labels_for_meshes(self):
         return NotImplementedError(self.DontUseBaseLoaderMssg)
-    
+
     def _read_decryptor_ring_file_and_get_labels(self):
         return NotImplementedError(self.DontUseBaseLoaderMssg)
 
@@ -65,7 +78,7 @@ class img23DBaseDataset(Dataset):
         return NotImplementedError(self.DontUseBaseLoaderMssg)
 
     def __len__(self):
-        return len(self.dataCatalog)
+        return len(self.dataCatalog.index)
 
     # get a row at an index 5375
     def __getitem__(self, idx):
