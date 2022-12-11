@@ -42,7 +42,7 @@ class ShapeNetModel(BaseModel):
         cli=("-drf", "--descryptor-ring-file"),
     )
     data_catalog_file: Optional[str] = Field(
-        "datacatalog_parts/datacatalog-*.csv", description=data_catalog_file_description
+        "datacatalog_parts/datacatalog.csv", description=data_catalog_file_description
     )
     data_catalog_file_type: Optional[str] = Field(
         "csv", description="data catalog output type (only csv supported currently)"
@@ -82,7 +82,7 @@ class ShapeNetModel(BaseModel):
         )
 
         values["datacatalog_path"] = Path(values["dataset_folder"].as_posix()).joinpath(
-            "".join(("datacatalog_parts/datacatalog-*.csv"))
+            "".join(("datacatalog_parts/datacatalog.csv"))
         )
 
         return values

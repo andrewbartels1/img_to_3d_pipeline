@@ -18,6 +18,7 @@ Pillow
 plotly
 requests
 matplotlib
+seaborn
 numpy
 PyMCubes
 tqdm
@@ -27,7 +28,6 @@ tqdm
 [dev]
 black[jupyter]
 datashader
-jupyter
 matplotlib
 pyarrow
 seaborn

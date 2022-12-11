@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset  # , DataLoader, random_split
 from im23D_pipeline.pydantic_models import ShapeNetModel
-import dask as dd
+import pandas as pnd
 
 # https://trimsh.org/trimesh.proximity.html#trimesh.proximity.signed_distance
 # https://trimsh.org/examples.nearest.html
@@ -44,7 +44,8 @@ class img23DBaseDataset(Dataset):
             self.data_catalog_file_path = self._generate_data_catalog()
 
         # load the csv file as a (dask) dataframe
-        self.dataCatalog = dd.dataframe.read_csv(self.data_catalog_file_path)
+        print("THIS IS Catalog path", self.data_catalog_file_path)
+        self.dataCatalog = pnd.read_csv(self.data_catalog_file_path)
 
     def write_catalog_to_csv(self, dataCatalog):
         if self.verbose:
@@ -56,7 +57,7 @@ class img23DBaseDataset(Dataset):
 
     def _load_data_catalog_file(self):
         """Reads in group of csv data catalogs files into dask dataframe"""
-        return dd.dataframe.read_csv(self.data_catalog_file_path)
+        return pnd.read_csv(self.data_catalog_file_path)
 
     def _load_objects_take_pictures(self):
         self.DontUseBaseLoaderMssg = (
