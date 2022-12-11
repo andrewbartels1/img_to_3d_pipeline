@@ -76,9 +76,9 @@ class ShapeNetCoreDataset(img23DBaseDataset):
         # merge the meta data descriptor file to get all the labels
         self.dataCatalog = pnd.merge(self.dataCatalog, self.meta_data_label_df, left_on="sysnetId", right_on="synsetId").drop(["children", "name"],axis=1)
         
-        self.dataCatalog.to_csv("./test.csv")
+        self.dataCatalog.to_csv(self.catalog_path)
         
-        print(self.dataCatalog)
+        print(self.dataCatalog.head(10))
         
         return self.catalog_path
 
