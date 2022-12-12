@@ -61,7 +61,7 @@ class ShapeNetCoreDataset(img23DBaseDataset):
 
         self.column_names_to_add_from_meta = self._get_column_names_to_add_from_meta()
 
-        print("adding columns:", self.column_names_to_add_from_meta)
+        print("adding columns to the dataCatalog:", self.column_names_to_add_from_meta)
 
         # add label column while we're at it
         # column_names_to_add_from_meta.append("simple_label")
