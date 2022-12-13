@@ -3,7 +3,7 @@
 !!!!!!!!!!!!!!!! Under construction !!!!!!!!!!!!!!!
 
 
-![2d3d_proposed dataflow diagram](./images/im23d_pipeline_diagram.drawio.pdf)
+![2d3d_proposed dataflow diagram](./images/im23d_pipeline_diagram.drawio.png)
 
 This repo is meant to be a Bring Your Own Model (BYOM) for 2d to 3d datasets. The dataset is a folder you point to, and you can write just a simple function to get metadata into the `dataCatalog.csv` or use the already generated `Pix3dDataset`, `ShapeNetCoreDataset`, `ABODataset`datasets!
 
