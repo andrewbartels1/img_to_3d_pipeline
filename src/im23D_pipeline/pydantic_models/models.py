@@ -19,23 +19,19 @@ class DataFileTypeChoices(Enum):
     # voxel = "voxel"
 
 
-class BaseModel(BaseModel):
+class DataBaseModel(BaseModel):
     """Fill this in when there are multiple pydantic models with repeated variables"""
-
-    storage_options_remote: Optional[Dict[str, Any]] = Field({}, description=storage_option_description)
-    local_protocol: Optional[str] = Field("file", description=protocol_description)
-    local_fs: Optional[Any]  # don't actually use this, it's generate based on other things
-    verbose: bool = Field(False, description="prints verbose output")
-
-
-class ShapeNetModel(BaseModel):
-    """Base model for dataset inputs"""
-
+    # folder and obj location stuff
     dataset_folder: DirectoryPath = Field(
         DirectoryPath, description=dataset_folder_description, cli=("-df", "--dataset-folder")
     )
     mesh_type: str = Field(MeshTypeChoices.mesh.value, description=mesh_type_description, cli=("-m", "--mesh"))
     data_file_type: str = Field(DataFileTypeChoices.obj.value, description=data_file_type_description)
+    # fsspec stuff
+    storage_options_remote: Optional[Dict[str, Any]] = Field({}, description=storage_option_description)
+    local_protocol: Optional[str] = Field("file", description=protocol_description)
+    local_fs: Optional[Any]  # don't actually use this, it's generate based on other things
+    verbose: bool = Field(False, description="prints verbose output")
     decryptor_ring_file: FilePath = Field(
         "../data/ShapeNetCore.v2/taxonomy.json",
         description=decryptor_ring_file_description,
@@ -80,12 +76,29 @@ class ShapeNetModel(BaseModel):
         values["datacatalog_path"] = Path(values["dataset_folder"].as_posix()).joinpath(
             "".join(("datacatalog_parts/datacatalog.csv"))
         )
+        
+        print("datacatalot path is:", values["datacatalog_path"])
 
         return values
 
     # For fsspec stuff
     class Config:
         arbitrary_types_allowed = True
+        
+        
+class ShapeNetModel(DataBaseModel):
+    """Base model for dataset inputs of ShapeNet"""
+    pass
+
+class Pix3dModel(DataBaseModel):
+    """Base model for dataset inputs of Pix3d"""
+    decryptor_ring_file: FilePath = Field(
+        "../data/pix3d_full/pix3d.json",
+        description=decryptor_ring_file_description,
+        cli=("-drf", "--descryptor-ring-file"),
+    )
+    
+    
 
 
 class BaseAtomicShapeNetInput(BaseModel):

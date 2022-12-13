@@ -2,13 +2,17 @@ __pycache__/*
 data/abo*
 data/images/*
 !data/ShapeNetCore.v2/.gitkeep
+!data/ShapeNetCore.v1/.gitkeep
 data/3dmodels/metadata/
 data/3dmodels/original/
 data/pix3d_full/
 data/ShapeNetCore.v2/*
+data/ShapeNetCore.v1/*
 data/r2n2_shapenet_dataset/
 !data/r2n2_shapenet_dataset/.gitkeep
 data/ShapeNetCore.v2.zip
+data/ShapeNetCore.v1.zip
 !data/README.md
  __pycache__/
  *.pyc
+data/pix3d_full.zip

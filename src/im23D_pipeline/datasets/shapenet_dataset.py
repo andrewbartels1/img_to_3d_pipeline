@@ -56,34 +56,53 @@ class ShapeNetCoreDataset(img23DBaseDataset):
         # first generate a dictionary of items that need to be stored in the `dask` dataframe
         self.dataCatalog = pnd.DataFrame.from_dict({"mesh_file_path": self.dataset_list})
 
+        print("found metadata file:", self.meta_data_label_df)
+        
         # run sets of functions to add columns, it's kind of slow, but it should only need to do this once!
         self.dataCatalog["metadata_file"] = self.dataCatalog.apply(self._get_per_obj_meta_json_path, axis=1)
 
-        self.column_names_to_add_from_meta = self._get_column_names_to_add_from_meta()
+        # if not all the columns are nulls
+        print("pre run catalog ", self.dataCatalog)
+        if not self.dataCatalog["metadata_file"].isnull().all():
+            self.column_names_to_add_from_meta = self._get_column_names_to_add_from_meta()
 
-        print("adding columns to the dataCatalog:", self.column_names_to_add_from_meta)
+            print("adding columns to the dataCatalog:", self.column_names_to_add_from_meta)
 
-        # add label column while we're at it
-        # column_names_to_add_from_meta.append("simple_label")
+            # add label column while we're at it
+            # column_names_to_add_from_meta.append("simple_label")
 
-        # add the empty columns to fill up in the slow apply function
-        tqdm.pandas(desc="reading metadata per .obj file")
+            # add the empty columns to fill up in the slow apply function
+            tqdm.pandas(desc="reading metadata per .obj file")
 
-        self.dataCatalog.progress_apply(self._assign_metadata_and_labels_for_meshes, axis=1, result_type="expand")
+            self.dataCatalog.progress_apply(self._assign_metadata_and_labels_for_meshes, axis=1, result_type="expand")
 
-        # self.dataCatalog[list(temp.columns)] = temp
-        self.dataCatalog = pnd.DataFrame(self.meta_list)
+            # self.dataCatalog[list(temp.columns)] = temp
+            self.dataCatalog = pnd.DataFrame(self.meta_list)
+        else:
+            print("error finding metadata json file in the same folder as the obj file, adding ids from path anyway.")
+            # add the empty columns to fill up in the slow apply function
+            tqdm.pandas(desc="reading metadata per .obj file")
 
+            self.dataCatalog.progress_apply(self._assign_metadata_and_labels_for_meshes, axis=1, result_type="expand")
+
+            # self.dataCatalog[list(temp.columns)] = temp
+            self.dataCatalog = pnd.DataFrame(self.meta_list)
+
+        print(self.dataCatalog)
         self.dataCatalog.to_csv(self.catalog_path)
 
         # merge the meta data descriptor file to get all the labels
         self.dataCatalog = pnd.merge(
             self.dataCatalog, self.meta_data_label_df, left_on="sysnetId", right_on="synsetId"
-        ).drop(["children", "name"], axis=1)
+        )
 
-        self.dataCatalog.to_csv(self.catalog_path)
+        self.dataCatalog["numChildren"] = self.dataCatalog["children"].str.len()
+        
+        
+        # drop unwanted 
+        self.dataCatalog.drop(["children", "name"], axis=1).to_csv(self.catalog_path)
 
-        print(self.dataCatalog.head(10))
+        if self.verbose: print("head of datacatalog produced", self.dataCatalog.head(10))
 
         return self.catalog_path
 
@@ -112,27 +131,35 @@ class ShapeNetCoreDataset(img23DBaseDataset):
 
     def _assign_metadata_and_labels_for_meshes(self, row):
         """Open a json metadata file (shapenet specific) and get a centroid, bounding box, and simple label, etc."""
-
+        meta_file_temp, temp = {}, {}
+        
         # get the sysnetId and modelId for a linker to the meta data.
         sysNetId, modelId = self._get_ids_from_path(Path(row.mesh_file_path))
 
         # open the metadata file specific to that .obj file
-        meta_file_temp = json.load(row["metadata_file"].open())
+        if self.local_fs.exists(row["metadata_file"]):
+            meta_file_temp = json.load(row["metadata_file"].open())
 
         # update with the Ids to link to meta data label
         meta_file_temp.update({"sysnetId": sysNetId, "modelId": modelId})
 
         meta_file_df = pnd.json_normalize(meta_file_temp, sep="_")
+        
+        # check if meta file present
+        if row.metadata_file is not None:
+            object_to_return = self.decompress_obj_meta_file_to_row(meta_file_df)
 
-        object_to_return = self.decompress_obj_meta_file_to_row(meta_file_df)
+            # do some joining of keys and append to dictionary
+            temp = object_to_return.to_dict(orient="records")
+            
+            row_dict = row.to_dict()
+            returns_from = {**row_dict, **temp[0]}
 
-        # do some joining of keys and append to dictionary
-        temp = object_to_return.to_dict(orient="records")
-        row_dict = row.to_dict()
-        returns_from = {**row_dict, **temp[0]}
-
-        # remove keys
-        [returns_from.pop(key) for key in ["id"]]
+            # remove keys
+            [returns_from.pop(key) for key in ["id"]]
+        else:
+            # if didn't find and reads meta json, just send the row to a dictionary with update sysnetID and modelId
+            returns_from = {**row.to_dict(), **meta_file_df.to_dict(orient="records")[0]}
 
         self.meta_list.append(returns_from)
 
@@ -177,15 +204,19 @@ class ShapeNetCoreDataset(img23DBaseDataset):
         if self.local_fs.exists(str(Path(row["mesh_file_path"]).parent.joinpath("model_normalized.json"))):
             return Path(row["mesh_file_path"]).parent / "model_normalized.json"
         else:
-            return self.local_fs.ls(str(Path(row["mesh_file_path"]).parent.joinpath("*.json")))[0]
+            return None
 
     def _get_ids_from_path(self, mesh_file_path: Path):
         """Gets the Sysnet and model Ids from the mesh file path"""
 
         # split on the ShapeNet folder name to establish where to start splitting!
         mesh_parts = Path(str(mesh_file_path).split("ShapeNet")[-1]).parents[0]
-
-        _, sysNetId, modelId, _ = str(mesh_parts).split(pathlib.os.sep)
+        
+        mesh_parts_list = str(mesh_parts).split(pathlib.os.sep)
+        if "v1" in mesh_parts_list[0]:
+            _, sysNetId, modelId = str(mesh_parts).split(pathlib.os.sep)
+        else:
+            _, sysNetId, modelId, _ = str(mesh_parts).split(pathlib.os.sep)
 
         return sysNetId, modelId
 

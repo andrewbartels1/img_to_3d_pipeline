@@ -1,1 +1,1 @@
-from .models import ShapeNetModel, BaseAtomicShapeNetInput, TrainerPydanticModel
+from .models import Pix3dModel, ShapeNetModel, DataBaseModel,BaseAtomicShapeNetInput, TrainerPydanticModel

@@ -3,8 +3,9 @@ from typing import Dict, List, Optional
 import numpy as np
 import torch
 from torch.utils.data import Dataset, random_split
-from im23D_pipeline.pydantic_models import ShapeNetModel
+from im23D_pipeline.pydantic_models import DataBaseModel
 import pandas as pnd
+
 
 # https://trimsh.org/trimesh.proximity.html#trimesh.proximity.signed_distance
 # https://trimsh.org/examples.nearest.html
@@ -18,7 +19,7 @@ class img23DBaseDataset(Dataset):
     not repeat yourself.
     """
 
-    def __init__(self, shape_input_model: ShapeNetModel):
+    def __init__(self, input_model: DataBaseModel):
 
         # Empty lists to be utilized by numerous functions
         self.labels_list = []
@@ -29,16 +30,16 @@ class img23DBaseDataset(Dataset):
         self.bbox_list = []
 
         # unpack pydantic model into class
-        self.data_folder = shape_input_model.dataset_folder
-        self.dataset_list = shape_input_model.dataset_list
-        self.mesh_type = shape_input_model.mesh_type
-        self.decryptor_ring_file = shape_input_model.decryptor_ring_file
-        self.data_catalog_file = shape_input_model.data_catalog_file
-        self.data_catalog_file_type = shape_input_model.data_catalog_file_type
-        self.refresh_data_catalog = shape_input_model.refresh_data_catalog
-        self.local_fs = shape_input_model.local_fs
-        self.verbose = shape_input_model.verbose
-        self.catalog_path = shape_input_model.datacatalog_path
+        self.data_folder = input_model.dataset_folder
+        self.dataset_list = input_model.dataset_list
+        self.mesh_type = input_model.mesh_type
+        self.decryptor_ring_file = input_model.decryptor_ring_file
+        self.data_catalog_file = input_model.data_catalog_file
+        self.data_catalog_file_type = input_model.data_catalog_file_type
+        self.refresh_data_catalog = input_model.refresh_data_catalog
+        self.local_fs = input_model.local_fs
+        self.verbose = input_model.verbose
+        self.catalog_path = input_model.datacatalog_path
 
         if not self.refresh_data_catalog:
             self.data_catalog_file_path = self._generate_data_catalog()
