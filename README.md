@@ -13,7 +13,7 @@ OccNet, Pix2Vox, SDFnet, 3DShapeGen, etc, etc. model running. The goal of this r
 The **hope** is that this will help lower the barrier to entry for people interested in this area of research and ensure that there are consistent, reproducable results for training, testing, and generating such 2d image to 3d
 model neural network/statistical models.
 
-This repo is the final result of many hours of hard work for a class project in CS 6743 at [Georgia Tech M.S. Data Analytics](https://catalog.gatech.edu/programs/analytics-ms/)
+This repo is the final result of many hours of hard work for a project while studying at [Georgia Tech M.S. Data Analytics](https://catalog.gatech.edu/programs/analytics-ms/)
 
 <!-- ![Demo Gif](images/demo.gif) a gif of it working once it's done! -->
 
